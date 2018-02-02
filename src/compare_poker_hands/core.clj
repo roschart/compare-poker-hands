@@ -4,8 +4,8 @@
   {\2 2 \3 3 \4 4 \5 5 \6 6 \7 7 \8 8 \9 9 \T 10 \J 11 \Q 12 \K 13 \A 14})
 
 (def hand-ranking
-  {:straight-flush 0
-   :high-card 10})
+  {:straight-flush 10
+   :high-card 0})
 
 (defn str-to-card
   "5S -> {:value 5 :suit S}
@@ -28,7 +28,7 @@
         higer (last sorted)
         lower (first sorted)
         result (= 4 (- higer lower))]
-      {:result result :to_break_tie higer :name :straight-flush}))
+      {:result result :to-break-tie higer :name :straight-flush}))
 
 
 (defn hand-analisys [hand]
@@ -47,6 +47,8 @@
 (defn compare-same-hand
   [firstHand secondHand hand-type]
   (case hand-type
+    :straight-flush (compare (get-in secondHand  [:analisys :to-break-tie])
+                             (get-in firstHand [:analisys :to-break-tie]))
     :high-card 45
     42))
 
