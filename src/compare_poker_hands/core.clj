@@ -21,20 +21,32 @@
     (clojure.string/split #" ")
     (->> (map str-to-card))))
 
-(defn straight-flush-analisys [hand]
+(defn straight-analisys [hand]
   (let [sorted (->> hand
                    (map :value)
                    (sort))
         higer (last sorted)
         lower (first sorted)
-        result (= 4 (- higer lower))]
-      {:result result :to-break-tie higer :name :straight-flush}))
+        straight? (= 4 (- higer lower))]
+      {:result straight? :to-break-tie higer :name :straight-flush}))
+
+(defn same-kind [hand]
+  (let [values (->> hand
+                   (map :value)
+                   (group-by identity)
+                   (map (fn [[value group]] [(count group) value])))
+        sorted (reverse (sort values))]
+      (cond
+        (= 4 (first (first sorted))) {:result sorted :to-break-tie sorted :name :four-of-a-kind}
+        :else {:result true :to-break-tie sorted :name :same-kind})))
+
 
 
 (defn hand-analisys [hand]
   "From list of carst to name"
   (cond
-    (:result (straight-flush-analisys hand)) (straight-flush-analisys hand)
+    (:result (straight-analisys hand)) (straight-analisys hand)
+    (:result (same-kind hand)) (same-kind hand)
     :else :high-card))
 
 (defn hand [hand-str]
