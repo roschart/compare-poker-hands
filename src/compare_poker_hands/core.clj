@@ -30,7 +30,7 @@
         straight? (= 4 (- higer lower))]
       {:result straight? :to-break-tie higer :name :straight-flush}))
 
-(defn same-kind [hand]
+(defn hand-analisys [hand]
   (let [groups (->> hand
                    (map :value)
                    (group-by identity)
@@ -55,13 +55,6 @@
         :else {:result kinds :to-break-tie sorted-values :name :not-match :posible-straight posible-straight :same-suit same-suit})))
 
 
-
-(defn hand-analisys [hand]
-  "From list of carst to name"
-  (cond
-    (:result (same-kind hand)) (same-kind hand)
-    :else :high-card))
-
 (defn hand [hand-str]
   "Create a map with all data of the a hand from a String"
   (let [cards (-> hand-str
@@ -84,12 +77,3 @@
     (if (= 0 compare-hand)
         (compare-same-hand fh sh)
         compare-hand)))
-
-
-;; test
-(def firstHand (hand "2S 2D 2C 2H JD"))
-(def secondHand(hand "3S 3D 3C 3H 7D"))
-(def a (get-in secondHand [:analisys :to-break-tie]))
-(def b (get-in firstHand [:analisys :to-break-tie]))
-(compare (get-in secondHand [:analisys :to-break-tie])
-         (get-in firstHand  [:analisys :to-break-tie]))
