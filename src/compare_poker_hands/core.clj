@@ -57,7 +57,8 @@
         (cond
           (and posible-straight same-suit) {:result kinds :to-break-tie higer :name :straight-flush}
           same-suit        {:result kinds :to-break-tie (into [] sorted-values) :name :flush}
-          posible-straight {:result kinds :to-break-tie higer :name :straight})
+          posible-straight {:result kinds :to-break-tie higer :name :straight}
+          :else {:result "kagada pasturet" :posible-straight posible-straight})
         :else {:result kinds :to-break-tie sorted-values :name :not-match :posible-straight posible-straight :same-suit same-suit})))
 
 

@@ -17,12 +17,13 @@
 
 (deftest transformations
   (testing "str-to-card"
-    (is (= (str-to-card "KD") {:value 13 :suit \D}))))
+    (is (= (str-to-card "KD") {:value 13 :suit \D})))
+  (testing "str-to-card"
+    (is (= (str-to-card "TD") {:value 10 :suit \D}))))
 
 (deftest hands
   (testing "Straight flush"
-    (is (= (:name (hand "KS AS TS QS JS")) :straight-flush)))
-  (testing "Straight flush"
+    (is (= (:name (hand "KS AS TS QS JS")) :straight-flush))
     (is (= (:name (hand "2H 3H 4H 5H 6H")) :straight-flush)))
   (testing "Four of a kind"
     (is (= (:name (hand "AS AD AC AH JD")) :four-of-a-kind))
@@ -30,4 +31,6 @@
   (testing "Full house"
     (is (= (:name (hand "AS AD AC KH KD")) :full-house)))
   (testing "Fluss"
-    (is (= (:name (hand "QS JD 9H 7H 8H")) :straight))))
+    (is (= (:name (hand "AD 5D 3D 7D KD")) :flush)))
+  (testing "Straight"
+    (is (= (:name (hand "QS JD 9H TH 8H")) :straight))))
