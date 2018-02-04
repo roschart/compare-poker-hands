@@ -31,23 +31,34 @@
       {:result straight? :to-break-tie higer :name :straight-flush}))
 
 (defn same-kind [hand]
-  (let [values (->> hand
+  (let [groups (->> hand
                    (map :value)
                    (group-by identity)
                    (map (fn [[value group]] [(count group) value])))
-        sorted (reverse (sort values))
-        kinds (map first sorted)]
+        sorted (reverse (sort groups))
+        kinds (map first sorted)
+        values (map second sorted)
+        sorted-values (sort values)
+        lower (first sorted-values)
+        higer (last sorted-values)
+        posible-straight (= 4 (- higer lower))
+        same-suit (->> hand (map :suit) (apply =))]
       (cond
-        (= [4 1] kinds) {:result kinds :to-break-tie sorted :name :four-of-a-kind}
-        (= [3 2] kinds) {:result kinds :to-break-tie sorted :name :full-house}
-        :else {:result kinds :to-break-tie sorted :name :same-kind})))
+        (= [4 1] kinds) {:result kinds :to-break-tie (into [] sorted) :name :four-of-a-kind}
+        (= [3 2] kinds) {:result kinds :to-break-tie (into [] sorted) :name :full-house}
+        (= [1 1 1 1 1] kinds)
+        (cond
+          (and posible-straight same-suit)
+          {:result kinds :to-break-tie higer :name :straight-flush}
+          same-suit        {:result kinds :to-break-tie (into [] sorted-values) :name :flush}
+          posible-straight {:result kinds :to-break-tie higer :name :straight})
+        :else {:result kinds :to-break-tie sorted-values :name :not-match :posible-straight posible-straight :same-suit same-suit})))
 
 
 
 (defn hand-analisys [hand]
   "From list of carst to name"
   (cond
-    (:result (straight-analisys hand)) (straight-analisys hand)
     (:result (same-kind hand)) (same-kind hand)
     :else :high-card))
 
@@ -59,12 +70,10 @@
    {:cards cards :analisys analisys :name (:name analisys)}))
 
 (defn compare-same-hand
-  [firstHand secondHand hand-type]
-  (case hand-type
-    :straight-flush (compare (get-in secondHand  [:analisys :to-break-tie])
-                             (get-in firstHand [:analisys :to-break-tie]))
-    :high-card 45
-    42))
+  [firstHand secondHand]
+  (compare (get-in secondHand [:analisys :to-break-tie])
+           (get-in firstHand  [:analisys :to-break-tie])))
+
 
 (defn ComparePokerHands
   [firstHand secondHand]
@@ -73,5 +82,14 @@
         compare-hand   (compare (hand-ranking (:name fh))
                                 (hand-ranking (:name sh)))]
     (if (= 0 compare-hand)
-        (compare-same-hand fh sh (:name fh))
+        (compare-same-hand fh sh)
         compare-hand)))
+
+
+;; test
+(def firstHand (hand "2S 2D 2C 2H JD"))
+(def secondHand(hand "3S 3D 3C 3H 7D"))
+(def a (get-in secondHand [:analisys :to-break-tie]))
+(def b (get-in firstHand [:analisys :to-break-tie]))
+(compare (get-in secondHand [:analisys :to-break-tie])
+         (get-in firstHand  [:analisys :to-break-tie]))
