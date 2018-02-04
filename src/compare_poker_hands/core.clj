@@ -35,10 +35,12 @@
                    (map :value)
                    (group-by identity)
                    (map (fn [[value group]] [(count group) value])))
-        sorted (reverse (sort values))]
+        sorted (reverse (sort values))
+        kinds (map first sorted)]
       (cond
         (= 4 (first (first sorted))) {:result sorted :to-break-tie sorted :name :four-of-a-kind}
-        :else {:result true :to-break-tie sorted :name :same-kind})))
+        (= [3 2] kinds) {:result kinds :to-break-tie sorted :name :full-house}
+        :else {:result kinds :to-break-tie sorted :name :same-kind})))
 
 
 

@@ -21,4 +21,6 @@
   (testing "Straight flush"
     (is (= (:name (hand "2H 3H 4H 5H 6H")) :straight-flush)))
   (testing "Four of a kind"
-    (is (= (:name (hand "AS AD AC AH JD")) :four-of-a-kind))))
+    (is (= (:name (hand "AS AD AC AH JD")) :four-of-a-kind)))
+  (testing "Full house"
+    (is (= (:name (hand "AS AD AC KH KD")) :full-house))))
