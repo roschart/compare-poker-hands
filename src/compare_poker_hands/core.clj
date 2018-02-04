@@ -51,16 +51,17 @@
         posible-straight (= 4 (- higer lower))
         same-suit (->> hand (map :suit) (apply =))]
       (cond
-        (= [4 1] kinds) {:result kinds :to-break-tie (into [] sorted) :name :four-of-a-kind}
-        (= [3 2] kinds) {:result kinds :to-break-tie (into [] sorted) :name :full-house}
+        (= [4 1] kinds)   {:result kinds :to-break-tie (into [] sorted) :name :four-of-a-kind}
+        (= [3 2] kinds)   {:result kinds :to-break-tie (into [] sorted) :name :full-house}
+        (= [3 1 1] kinds) {:result kinds :to-break-tie (into [] sorted) :name :three-of-kind}
+        (= [2 2 1] kinds) {:result kinds :to-break-tie (into [] sorted) :name :two-pair}
+        (= [2 1 1 1] kinds) {:result kinds :to-break-tie (into [] sorted) :name :one-pair}
         (= [1 1 1 1 1] kinds)
         (cond
           (and posible-straight same-suit) {:result kinds :to-break-tie higer :name :straight-flush}
           same-suit        {:result kinds :to-break-tie (into [] sorted-values) :name :flush}
           posible-straight {:result kinds :to-break-tie higer :name :straight}
-          :else {:result "kagada pasturet" :posible-straight posible-straight})
-        :else {:result kinds :to-break-tie sorted-values :name :not-match :posible-straight posible-straight :same-suit same-suit})))
-
+          :else            {:result kinds :to-break-tie (into [] sorted-values) :name :high-card}))))
 
 (defn hand [hand-str]
   "Create a map with all data of the a hand from a String"
@@ -73,7 +74,6 @@
   [firstHand secondHand]
   (compare (get-in secondHand [:analisys :to-break-tie])
            (get-in firstHand  [:analisys :to-break-tie])))
-
 
 (defn ComparePokerHands
   [firstHand secondHand]

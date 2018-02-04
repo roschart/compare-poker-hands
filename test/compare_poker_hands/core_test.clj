@@ -35,4 +35,10 @@
   (testing "Straight"
     (is (= (:name (hand "QS JD 9H TH 8H")) :straight)))
   (testing "tree-of-a-kind"
-    (is (= (:name (hand "QS QD QH TH 8H")) :three-of-kind))))
+    (is (= (:name (hand "QS QD QH TH 8H")) :three-of-kind)))
+  (testing "two-pair"
+    (is (= (:name (hand "QS QD TD TH 8H")) :two-pair)))
+  (testing "one-pair"
+    (is (= (:name (hand "QS QD 3H 4H 8H")) :one-pair)))
+  (testing "high-card"
+    (is (= (:name (hand "QS 2D 3H TH 8H")) :high-card))))
