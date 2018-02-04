@@ -4,8 +4,10 @@
   {\2 2 \3 3 \4 4 \5 5 \6 6 \7 7 \8 8 \9 9 \T 10 \J 11 \Q 12 \K 13 \A 14})
 
 (def hand-ranking
-  {:straight-flush 10
-   :high-card 0})
+  {:straight-flush  0
+   :four-of-a-kind  1
+   :full-house      2
+   :high-card       20})
 
 (defn str-to-card
   "5S -> {:value 5 :suit S}
