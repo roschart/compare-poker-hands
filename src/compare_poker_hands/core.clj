@@ -7,7 +7,12 @@
   {:straight-flush  0
    :four-of-a-kind  1
    :full-house      2
-   :high-card       20})
+   :flush           3
+   :straight        4
+   :tree-of-a-kind  5
+   :two-pair        6
+   :one-pair        7
+   :high-card       8})
 
 (defn str-to-card
   "5S -> {:value 5 :suit S}
@@ -50,8 +55,7 @@
         (= [3 2] kinds) {:result kinds :to-break-tie (into [] sorted) :name :full-house}
         (= [1 1 1 1 1] kinds)
         (cond
-          (and posible-straight same-suit)
-          {:result kinds :to-break-tie higer :name :straight-flush}
+          (and posible-straight same-suit) {:result kinds :to-break-tie higer :name :straight-flush}
           same-suit        {:result kinds :to-break-tie (into [] sorted-values) :name :flush}
           posible-straight {:result kinds :to-break-tie higer :name :straight})
         :else {:result kinds :to-break-tie sorted-values :name :not-match :posible-straight posible-straight :same-suit same-suit})))
