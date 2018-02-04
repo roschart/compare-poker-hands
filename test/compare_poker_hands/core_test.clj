@@ -26,4 +26,6 @@
     (is (= (:name (hand "AS AD AC AH JD")) :four-of-a-kind))
     (is (= (:name (hand "3S 3D 3C 3H 7D")) :four-of-a-kind)))
   (testing "Full house"
-    (is (= (:name (hand "AS AD AC KH KD")) :full-house))))
+    (is (= (:name (hand "AS AD AC KH KD")) :full-house)))
+  (testing "Fluss"
+    (is (= (:name (hand "AS AD AC KH KD")) :flush))))
