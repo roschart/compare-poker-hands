@@ -9,7 +9,7 @@
    :full-house      2
    :flush           3
    :straight        4
-   :tree-of-a-kind  5
+   :three-of-a-kind  5
    :two-pair        6
    :one-pair        7
    :high-card       8})

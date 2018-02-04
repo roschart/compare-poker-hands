@@ -33,4 +33,6 @@
   (testing "Fluss"
     (is (= (:name (hand "AD 5D 3D 7D KD")) :flush)))
   (testing "Straight"
-    (is (= (:name (hand "QS JD 9H TH 8H")) :straight))))
+    (is (= (:name (hand "QS JD 9H TH 8H")) :straight)))
+  (testing "tree-of-a-kind"
+    (is (= (:name (hand "QS QD QH TH 8H")) :three-of-kind))))
