@@ -42,7 +42,8 @@
                    (map :value)
                    (group-by identity)
                    (map (fn [[value group]] [(count group) value])))
-        sorted (reverse (sort groups))
+        sorted (reverse (sort-by (juxt first second) groups))
+        to-break-tie (into [] sorted)
         kinds (map first sorted)
         values (map second sorted)
         sorted-values (sort values)
@@ -51,17 +52,17 @@
         posible-straight (= 4 (- higer lower))
         same-suit (->> hand (map :suit) (apply =))]
       (cond
-        (= [4 1] kinds)   {:result kinds :to-break-tie (into [] sorted) :name :four-of-a-kind}
-        (= [3 2] kinds)   {:result kinds :to-break-tie (into [] sorted) :name :full-house}
-        (= [3 1 1] kinds) {:result kinds :to-break-tie (into [] sorted) :name :three-of-kind}
-        (= [2 2 1] kinds) {:result kinds :to-break-tie (into [] sorted) :name :two-pair}
-        (= [2 1 1 1] kinds) {:result kinds :to-break-tie (into [] sorted) :name :one-pair}
+        (= [4 1] kinds)   {:result kinds :to-break-tie to-break-tie :name :four-of-a-kind}
+        (= [3 2] kinds)   {:result kinds :to-break-tie to-break-tie :name :full-house}
+        (= [3 1 1] kinds) {:result kinds :to-break-tie to-break-tie :name :three-of-kind}
+        (= [2 2 1] kinds) {:result kinds :to-break-tie to-break-tie :name :two-pair}
+        (= [2 1 1 1] kinds) {:result kinds :to-break-tie to-break-tie :name :one-pair}
         (= [1 1 1 1 1] kinds)
         (cond
-          (and posible-straight same-suit) {:result kinds :to-break-tie higer :name :straight-flush}
-          same-suit        {:result kinds :to-break-tie (into [] sorted-values) :name :flush}
-          posible-straight {:result kinds :to-break-tie higer :name :straight}
-          :else            {:result kinds :to-break-tie (into [] sorted-values) :name :high-card}))))
+          (and posible-straight same-suit) {:result kinds :to-break-tie to-break-tie :name :straight-flush}
+          same-suit        {:result kinds :to-break-tie to-break-tie :name :flush}
+          posible-straight {:result kinds :to-break-tie to-break-tie :name :straight}
+          :else            {:result kinds :to-break-tie to-break-tie :name :high-card}))))
 
 (defn hand [hand-str]
   "Create a map with all data of the a hand from a String"
