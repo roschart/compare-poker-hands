@@ -28,15 +28,6 @@
     (clojure.string/split #" ")
     (->> (map str-to-card))))
 
-(defn straight-analisys [hand]
-  (let [sorted (->> hand
-                   (map :value)
-                   (sort))
-        higer (last sorted)
-        lower (first sorted)
-        straight? (= 4 (- higer lower))]
-      {:result straight? :to-break-tie higer :name :straight-flush}))
-
 (defn hand-analisys [hand]
   (let [groups (->> hand
                    (map :value)
